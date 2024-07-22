@@ -13,8 +13,20 @@ const getProductById = async (id) => {
 };
 
 // Create a new product
+// Create a new product
 const createProduct = async (product) => {
-    const { product_name, supplier_id, category_id, quantity_per_unit, unit_price, units_in_stock, units_on_order, reorder_level, discontinued } = product;
+    const { 
+        product_name, 
+        supplier_id, 
+        category_id, 
+        quantity_per_unit, 
+        unit_price, 
+        units_in_stock, 
+        units_on_order, 
+        reorder_level, 
+        discontinued 
+    } = product;
+    
     const result = await pool.query(
         `INSERT INTO products (
             product_name,
@@ -33,11 +45,22 @@ const createProduct = async (product) => {
 };
 
 // Update a product by ID
+// Update a product by ID
 const updateProduct = async (id, product) => {
-    const {product_id,  product_name, supplier_id, category_id, quantity_per_unit, unit_price, units_in_stock, units_on_order, reorder_level, discontinued } = product;
+    const { 
+        product_name, 
+        supplier_id, 
+        category_id, 
+        quantity_per_unit, 
+        unit_price, 
+        units_in_stock, 
+        units_on_order, 
+        reorder_level, 
+        discontinued 
+    } = product;
+    
     const result = await pool.query(
         `UPDATE products SET
-           product_name =$0,
             product_name = $1,
             supplier_id = $2,
             category_id = $3,
