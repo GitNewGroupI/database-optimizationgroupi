@@ -1,120 +1,102 @@
 const express = require('express');
-const router = express.Router();
 const productController = require('../controllers/productController');
+const router = express.Router();
 
+router.get('/', productController.getAllProducts);
+
+module.exports = router;
 /**
  * @swagger
- * tags:
- *   name: Products
- *   description: Product management
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - product_name
+ *         - supplier_id
+ *         - category_id
+ *         - quantity_per_unit
+ *         - unit_price
+ *         - units_in_stock
+ *         - units_on_order
+ *         - reorder_level
+ *         - discontinued
+ *       properties:
+ *         product_id:
+ *           type: integer
+ *           description: The auto-generated id of the product
+ *         product_name:
+ *           type: string
+ *           description: The name of the product
+ *         supplier_id:
+ *           type: integer
+ *           description: The ID of the supplier
+ *         category_id:
+ *           type: integer
+ *           description: The ID of the category
+ *         quantity_per_unit:
+ *           type: string
+ *           description: The quantity per unit
+ *         unit_price:
+ *           type: number
+ *           description: The price per unit
+ *         units_in_stock:
+ *           type: integer
+ *           description: The number of units in stock
+ *         units_on_order:
+ *           type: integer
+ *           description: The number of units on order
+ *         reorder_level:
+ *           type: integer
+ *           description: The reorder level
+ *         discontinued:
+ *           type: integer
+ *           description: Whether the product is discontinued (0 for false, 1 for true)
  */
+
 
 /**
  * @swagger
  * /products:
  *   get:
- *     summary: Retrieve all products
+ *     summary: Retrieve a list of products
  *     tags: [Products]
  *     responses:
  *       200:
- *         description: List of products
+ *         description: A list of products
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   product_id:
- *                     type: integer
- *                     example: 1
- *                   product_name:
- *                     type: string
- *                     example: Widget
- *                   supplier_id:
- *                     type: integer
- *                     example: 2
- *                   category_id:
- *                     type: integer
- *                     example: 3
- *                   quantity_per_unit:
- *                     type: string
- *                     example: 10 boxes
- *                   unit_price:
- *                     type: number
- *                     format: float
- *                     example: 19.99
- *                   units_in_stock:
- *                     type: integer
- *                     example: 100
- *                   units_on_order:
- *                     type: integer
- *                     example: 50
- *                   reorder_level:
- *                     type: integer
- *                     example: 10
- *                   discontinued:
- *                     type: integer
- *                     example: 0
+ *                 $ref: '#/components/schemas/Product'
  */
-router.get('/', productController.getAllProducts);
+router.get('/products', productController.getAllProducts);
 
 /**
  * @swagger
  * /products/{id}:
  *   get:
- *     summary: Retrieve a product by ID
+ *     summary: Retrieve a single product
  *     tags: [Products]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
- *         description: Product ID
  *         schema:
  *           type: integer
+ *         required: true
+ *         description: The product ID
  *     responses:
  *       200:
- *         description: Product details
+ *         description: A single product
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 product_id:
- *                   type: integer
- *                   example: 1
- *                 product_name:
- *                   type: string
- *                   example: Widget
- *                 supplier_id:
- *                   type: integer
- *                   example: 2
- *                 category_id:
- *                   type: integer
- *                   example: 3
- *                 quantity_per_unit:
- *                   type: string
- *                   example: 10 boxes
- *                 unit_price:
- *                   type: number
- *                   format: float
- *                   example: 19.99
- *                 units_in_stock:
- *                   type: integer
- *                   example: 100
- *                 units_on_order:
- *                   type: integer
- *                   example: 50
- *                 reorder_level:
- *                   type: integer
- *                   example: 10
- *                 discontinued:
- *                   type: integer
- *                   example: 0
+ *               $ref: '#/components/schemas/Product'
  *       404:
  *         description: Product not found
  */
-router.get('/:id', productController.getProductById);
+router.get('/', productController.getAllProducts);
 
 /**
  * @swagger
@@ -122,213 +104,79 @@ router.get('/:id', productController.getProductById);
  *   post:
  *     summary: Create a new product
  *     tags: [Products]
- * product_id:
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               product_name:
- *                 type: string
- *               supplier_id:
- *                 type: integer
- *               category_id:
- *                 type: integer
- *               quantity_per_unit:
- *                 type: string
- *               unit_price:
- *                 type: number
- *                 format: float
- *               units_in_stock:
- *                 type: integer
- *               units_on_order:
- *                 type: integer
- *               reorder_level:
- *                 type: integer
- *               discontinued:
- *                 type: integer
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       201:
- *         description: Product created
+ *         description: The created product
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 product_id:
- *                   type: integer
- *                   example: 1
- *                 product_name:
- *                   type: string
- *                   example: Widget
- *                 supplier_id:
- *                   type: integer
- *                   example: 2
- *                 category_id:
- *                   type: integer
- *                   example: 3
- *                 quantity_per_unit:
- *                   type: string
- *                   example: 10 boxes
- *                 unit_price:
- *                   type: number
- *                   format: float
- *                   example: 19.99
- *                 units_in_stock:
- *                   type: integer
- *                   example: 100
- *                 units_on_order:
- *                   type: integer
- *                   example: 50
- *                 reorder_level:
- *                   type: integer
- *                   example: 10
- *                 discontinued:
- *                   type: integer
- *                   example: 0
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Invalid input
  */
-router.post('/', productController.createProduct);
+router.post('/products', productController.createProduct);
 
 /**
  * @swagger
  * /products/{id}:
  *   put:
- *     summary: Update a product by ID
+ *     summary: Update a product
  *     tags: [Products]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
- *         description: Product ID
  *         schema:
  *           type: integer
+ *         required: true
+ *         description: The product ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               product_name:
- *                 type: string
- *               supplier_id:
- *                 type: integer
- *               category_id:
- *                 type: integer
- *               quantity_per_unit:
- *                 type: string
- *               unit_price:
- *                 type: number
- *                 format: float
- *               units_in_stock:
- *                 type: integer
- *               units_on_order:
- *                 type: integer
- *               reorder_level:
- *                 type: integer
- *               discontinued:
- *                 type: integer
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       200:
- *         description: Product updated
+ *         description: The updated product
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 product_id:
- *                   type: integer
- *                   example: 1
- *                 product_name:
- *                   type: string
- *                   example: Widget
- *                 supplier_id:
- *                   type: integer
- *                   example: 2
- *                 category_id:
- *                   type: integer
- *                   example: 3
- *                 quantity_per_unit:
- *                   type: string
- *                   example: 10 boxes
- *                 unit_price:
- *                   type: number
- *                   format: float
- *                   example: 19.99
- *                 units_in_stock:
- *                   type: integer
- *                   example: 100
- *                 units_on_order:
- *                   type: integer
- *                   example: 50
- *                 reorder_level:
- *                   type: integer
- *                   example: 10
- *                 discontinued:
- *                   type: integer
- *                   example: 0
+ *               $ref: '#/components/schemas/Product'
  *       404:
  *         description: Product not found
  */
-router.put('/:id', productController.updateProduct);
+ 
+router.put('/products/:id', productController.updateProduct);
 
 /**
  * @swagger
  * /products/{id}:
  *   delete:
- *     summary: Delete a product by ID
+ *     summary: Delete a product
  *     tags: [Products]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
- *         description: Product ID
  *         schema:
  *           type: integer
+ *         required: true
+ *         description: The product ID
  *     responses:
  *       200:
- *         description: Product deleted
+ *         description: The deleted product
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 product_id:
- *                   type: integer
- *                   example: 1
- *                 product_name:
- *                   type: string
- *                   example: Widget
- *                 supplier_id:
- *                   type: integer
- *                   example: 2
- *                 category_id:
- *                   type: integer
- *                   example: 3
- *                 quantity_per_unit:
- *                   type: string
- *                   example: 10 boxes
- *                 unit_price:
- *                   type: number
- *                   format: float
- *                   example: 19.99
- *                 units_in_stock:
- *                   type: integer
- *                   example: 100
- *                 units_on_order:
- *                   type: integer
- *                   example: 50
- *                 reorder_level:
- *                   type: integer
- *                   example: 10
- *                 discontinued:
- *                   type: integer
- *                   example: 0
+ *               $ref: '#/components/schemas/Product'
  *       404:
  *         description: Product not found
  */
-router.delete('/:id', productController.deleteProduct);
+router.delete('/products/:id', productController.deleteProduct);
 
 module.exports = router;
