@@ -4,14 +4,14 @@ The technology utilized includes:
    PostgreSQL
    Swagger (swagger-jsdoc, swagger-ui-express)
 
- FEATURES
+** FEATURES*****
  CRUD operations for product API documentation using Swagger. 
 
 Create
 Retrieve
 Update
 Delete
-INSTALLATION
+I**NSTALLATION**
 InstalL Node.js and Express
 Install PostgreSQL establish a database Shopease.Then in Node.js Execute node scripts/populateDb.js
 Install dependencies in Node.js for example npm install express pg. dotenv npm install --save-dev nodemon.
