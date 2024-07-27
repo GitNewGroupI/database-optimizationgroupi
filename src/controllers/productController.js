@@ -31,51 +31,87 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
     try {
         console.log('Request Body:', req.body);
-        const { product_name, supplier_id, category_id, quantity_per_unit, unit_price, units_in_stock, units_on_order, reorder_level, discontinued } = req.body;
-        
+        const { 
+            product_name, 
+            supplier_id, 
+            category_id, 
+            quantity_per_unit, 
+            unit_price, 
+            units_in_stock, 
+            units_on_order, 
+            reorder_level, 
+            discontinued 
+        } = req.body;
+
         if (!product_name || discontinued === undefined) {
             return res.status(400).json({ error: 'Missing required fields: product_name, discontinued' });
         }
-        
+
+        // Validate numeric fields
+        const numericFields = { unit_price, units_in_stock, units_on_order, reorder_level };
+        for (const [key, value] of Object.entries(numericFields)) {
+            if (value !== undefined && !Number.isFinite(Number(value))) {
+                return res.status(400).json({ error: `Invalid numeric value for ${key}` });
+            }
+        }
+
         const newProduct = await productsModel.createProduct({
             product_name,
-            supplier_id,
-            category_id,
-            quantity_per_unit,
-            unit_price,
-            units_in_stock,
-            units_on_order,
-            reorder_level,
-            discontinued
+            supplier_id: supplier_id || null,
+            category_id: category_id || null,
+            quantity_per_unit: quantity_per_unit || null,
+            unit_price: unit_price !== undefined ? Number(unit_price) : null,
+            units_in_stock: units_in_stock !== undefined ? Number(units_in_stock) : null,
+            units_on_order: units_on_order !== undefined ? Number(units_on_order) : null,
+            reorder_level: reorder_level !== undefined ? Number(reorder_level) : null,
+            discontinued: Number(discontinued)
         });
-        
+
         res.status(201).json(newProduct);
     } catch (err) {
-        console.error('Error in createProduct:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Full error object:', err);
+        res.status(500).json({ error: 'Internal server error', details: err.message });
     }
 };
 
 const updateProduct = async (req, res) => {
     try {
-        const { product_name, supplier_id, category_id, quantity_per_unit, unit_price, units_in_stock, units_on_order, reorder_level, discontinued } = req.body;
-        
+        const { 
+            product_name, 
+            supplier_id, 
+            category_id, 
+            quantity_per_unit, 
+            unit_price, 
+            units_in_stock, 
+            units_on_order, 
+            reorder_level, 
+            discontinued 
+        } = req.body;
+
         if (!product_name || discontinued === undefined) {
             return res.status(400).json({ error: 'Missing required fields: product_name, discontinued' });
         }
-        
+
+        // Validate numeric fields
+        const numericFields = { unit_price, units_in_stock, units_on_order, reorder_level };
+        for (const [key, value] of Object.entries(numericFields)) {
+            if (value !== undefined && !Number.isFinite(Number(value))) {
+                return res.status(400).json({ error: `Invalid numeric value for ${key}` });
+            }
+        }
+
         const updatedProduct = await productsModel.updateProduct(req.params.id, {
             product_name,
-            supplier_id,
-            category_id,
-            quantity_per_unit,
-            unit_price,
-            units_in_stock,
-            units_on_order,
-            reorder_level,
-            discontinued
+            supplier_id: supplier_id || null,
+            category_id: category_id || null,
+            quantity_per_unit: quantity_per_unit || null,
+            unit_price: unit_price !== undefined ? Number(unit_price) : null,
+            units_in_stock: units_in_stock !== undefined ? Number(units_in_stock) : null,
+            units_on_order: units_on_order !== undefined ? Number(units_on_order) : null,
+            reorder_level: reorder_level !== undefined ? Number(reorder_level) : null,
+            discontinued: Number(discontinued)
         });
-        
+
         if (updatedProduct) {
             res.json(updatedProduct);
         } else {
@@ -83,7 +119,7 @@ const updateProduct = async (req, res) => {
         }
     } catch (err) {
         console.error('Error in updateProduct:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error', details: err.message });
     }
 };
 

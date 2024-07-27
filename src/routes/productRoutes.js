@@ -2,9 +2,6 @@ const express = require('express');
 const productController = require('../controllers/productController');
 const router = express.Router();
 
-router.get('/', productController.getAllProducts);
-
-module.exports = router;
 /**
  * @swagger
  * components:
@@ -54,7 +51,6 @@ module.exports = router;
  *           description: Whether the product is discontinued (0 for false, 1 for true)
  */
 
-
 /**
  * @swagger
  * /products:
@@ -71,7 +67,7 @@ module.exports = router;
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-router.get('/products', productController.getAllProducts);
+router.get('/', productController.getAllProducts);
 
 /**
  * @swagger
@@ -96,7 +92,7 @@ router.get('/products', productController.getAllProducts);
  *       404:
  *         description: Product not found
  */
-router.get('/', productController.getAllProducts);
+router.get('/:id', productController.getProductById);
 
 /**
  * @swagger
@@ -120,7 +116,7 @@ router.get('/', productController.getAllProducts);
  *       400:
  *         description: Invalid input
  */
-router.post('/products', productController.createProduct);
+router.post('/', productController.createProduct);
 
 /**
  * @swagger
@@ -151,8 +147,7 @@ router.post('/products', productController.createProduct);
  *       404:
  *         description: Product not found
  */
- 
-router.put('/products/:id', productController.updateProduct);
+router.put('/:id', productController.updateProduct);
 
 /**
  * @swagger
@@ -177,6 +172,6 @@ router.put('/products/:id', productController.updateProduct);
  *       404:
  *         description: Product not found
  */
-router.delete('/products/:id', productController.deleteProduct);
+router.delete('/:id', productController.deleteProduct);
 
 module.exports = router;
